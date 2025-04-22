@@ -69,6 +69,9 @@ export async function getThemeData(): Promise<AccountThemeProps & UserThemeProps
         console.log("Error in fetching theme data", error);
     }
 
+
+    console.log(fAccountTheme?.light?.primary , defaultAccountTheme.light.primary)
+
     const accountTheme = {
         light: {
             primary: fAccountTheme?.light?.primary || defaultAccountTheme.light.primary,

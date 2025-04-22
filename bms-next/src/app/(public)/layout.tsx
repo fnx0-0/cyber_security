@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Toaster } from "@/shadcn/ui/sonner";
-import "@/ikon/styles/globals.css";
+//import "@/app/(protected)/(apps)/cyber-security/misc/styles/globals.css";
 import "@/ikon/styles/public.css";
 import { ThemeProvider } from "@/ikon/components/theme-provider";
 import { defaultAccountTheme, defaultUserTheme } from "@/ikon/utils/actions/theme/type";

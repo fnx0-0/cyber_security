@@ -1,18 +1,16 @@
-import "../../styles/globals.css";
-import ConfigSidebar from "./components/ConfigSidebar";
-import { ConfigurationProvider } from "./components/ConfigurationContext";
+import { RenderAppBreadcrumb } from "@/components/app-breadcrumb";
+import { ReactNode } from "react";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <div className="flex h-full">
-        <ConfigSidebar />
-        <ConfigurationProvider>{children}</ConfigurationProvider>
-      </div>
-    </>
-  );
+export default function Layout({ children }: Readonly<{ children: ReactNode }>) {
+    return (
+        <>
+            {/* <RenderAppBreadcrumb
+                breadcrumb={{
+                    level: 0,
+                    title: "Configuration",
+                }}
+            /> */}
+            {children}
+        </>
+    );
 }

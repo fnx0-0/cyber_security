@@ -2,6 +2,7 @@
 
 import { RiAddFill } from "@remixicon/react";
 import { Tab, TabGroup, TabList } from "@tremor/react";
+import "../../misc/styles/globals.css"
 
 export default function Dashboard() {
   return (

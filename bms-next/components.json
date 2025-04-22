@@ -5,8 +5,8 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.ts",
-    "css": "src/app/globals.css",
-    "baseColor": "slate",
+    "css": "rc/styles/globals.css",
+    "baseColor": "default",
     "cssVariables": true,
     "prefix": ""
   },
@@ -15,7 +15,9 @@
     "utils": "@/shadcn/lib/utils",
     "ui": "@/shadcn/ui",
     "lib": "@/shadcn/lib",
-    "hooks": "@/shadcn/hooks"
+    "hooks": "@/shadcn/hooks",
+    "cyber": "@/app/(protected)/(apps)/cyber-security/components",
+    "shared": "@/components/shared"
   },
   "iconLibrary": "lucide"
 }

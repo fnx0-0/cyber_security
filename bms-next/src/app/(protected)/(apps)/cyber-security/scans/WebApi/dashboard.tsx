@@ -20,6 +20,7 @@ import {
   TableRow,
 } from "@/components/Table";
 import { data, severity, tableData, alertsCount } from "./data";
+import Link from "next/link";
 
 console.log(severity);
 
@@ -28,11 +29,11 @@ function classNames(...classes: string[]) {
 }
 
 const ristCodeVsDesc = {
-  0: "info",
-  1: "low",
-  2: "medium",
-  3: "high",
-  4: "critical",
+  0: "Info",
+  1: "Low",
+  2: "Medium",
+  3: "High",
+  4: "Critical",
 };
 
 function removePTags(htmlString) {
@@ -44,30 +45,40 @@ function extractTextFromPTags(htmlString) {
   return matches ? matches.map((p) => p.replace(/<\/?p>/g, "")) : [];
 }
 
+const getBadgeVariant = (value) => {
+  return value === "Critical" || value === "High"
+    ? "error"
+    : value === "Medium"
+    ? "warning"
+    : value === "Low"
+    ? "success"
+    : "default";
+};
+
 export default function Dashboard({ _data }) {
   const _severity = [
     {
-      severity: "critical",
+      severity: "Critical",
       count: 0,
       borderColor: "bg-red-900",
     },
     {
-      severity: "high",
+      severity: "High",
       count: 0,
       borderColor: "bg-red-500",
     },
     {
-      severity: "medium",
+      severity: "Medium",
       count: 0,
       borderColor: "bg-yellow-500",
     },
     {
-      severity: "low",
+      severity: "Low",
       count: 0,
       borderColor: "bg-green-800",
     },
     {
-      severity: "info",
+      severity: "Info",
       count: 0,
       borderColor: "bg-blue-600",
     },
@@ -93,7 +104,10 @@ export default function Dashboard({ _data }) {
     <div className="min-h-[90vh]">
       <section className="my-4">
         <div className="grid grid-cols-4 gap-5">
-          <Card className="col-span-1 rounded-md ">
+          <Card
+            className="col-span-1 rounded-md bg-tremor-background ring-tremor-ring shadow-tremor-card dark:ring-dark-tremor-ring dark:shadow-dark-tremor-card border-tremor-brand dark:border-dark-tremor-brand relative flex flex-col rounded-lg justify-between
+           dark:bg-dark-bgPrimary hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-muted"
+          >
             <div className="flex flex-col items-center">
               <div className=" mt-2 grid grid-cols-8 gap-8 items-center">
                 <div className="relative col-span-3">
@@ -141,10 +155,10 @@ export default function Dashboard({ _data }) {
                           )}
                         />
                         <div>
-                          <p className="text-sm font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                             {item.count}
                           </p>
-                          <p className="mt-0.5 whitespace-nowrap text-sm text-tremor-content dark:text-dark-tremor-content">
+                          <p className="mt-0.5 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
                             {item.severity}
                           </p>
                         </div>
@@ -155,7 +169,10 @@ export default function Dashboard({ _data }) {
               </div>
             </div>
           </Card>
-          <Card className="col-span-3 rounded-md ">
+          <Card
+            className="col-span-3 rounded-md bg-tremor-background ring-tremor-ring shadow-tremor-card dark:ring-dark-tremor-ring dark:shadow-dark-tremor-card border-tremor-brand dark:border-dark-tremor-brand relative  flex-col rounded-lg justify-between
+           dark:bg-dark-bgPrimary hover:bg-tremor-background-muted hover:dark:bg-dark-tremor-background-mute"
+          >
             <div className="flex gap-5">
               <h3 className="text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
                 {_data.site[0]["@name"]}
@@ -168,49 +185,6 @@ export default function Dashboard({ _data }) {
         </div>
         <div className="w-full mt-8">
           <h1 className="text-md font-semibold text-gray-900 dark:text-gray-50">
-            Alerts
-          </h1>
-          <TableRoot className="mt-3">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {/* <TableHeaderCell>Id</TableHeaderCell> */}
-                  <TableHeaderCell>Name</TableHeaderCell>
-                  <TableHeaderCell>Risk Level</TableHeaderCell>
-                  <TableHeaderCell>Instances</TableHeaderCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {_data.site[0].alerts.map((item) => (
-                  <TableRow key={item.pluginid}>
-                    {/* <TableCell>{item.pluginid}</TableCell> */}
-                    <TableCell>{item.alert}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          ristCodeVsDesc[item.riskcode] === "critical" ||
-                          ristCodeVsDesc[item.riskcode] === "high"
-                            ? "error"
-                            : ristCodeVsDesc[item.riskcode] === "medium"
-                            ? "warning"
-                            : ristCodeVsDesc[item.riskcode] === "low"
-                            ? "success"
-                            : "default"
-                        }
-                      >
-                        {ristCodeVsDesc[item.riskcode]}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{item.count}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableRoot>
-        </div>
-
-        <div className="w-full mt-8">
-          <h1 className="text-md font-semibold text-gray-900 dark:text-gray-50">
             Alert Details
           </h1>
           <Accordion type="multiple" className="mt-3 ">
@@ -220,117 +194,142 @@ export default function Dashboard({ _data }) {
                   <span className="flex items-center gap-2 h-8">
                     <RiAlertLine
                       className={`size-4 ${
-                        ristCodeVsDesc[dataItem.riskcode] === "critical"
-                          ? "text-red-900"
-                          : ristCodeVsDesc[dataItem.riskcode] === "high"
-                          ? "text-red-900"
-                          : ristCodeVsDesc[dataItem.riskcode] === "medium"
-                          ? "text-yellow-900"
-                          : ristCodeVsDesc[dataItem.riskcode] === "low"
-                          ? "text-emerald-900"
-                          : "text-blue-900"
+                        ristCodeVsDesc[dataItem.riskcode] === "Critical"
+                          ? "text-red-900 dark:text-red-400"
+                          : ristCodeVsDesc[dataItem.riskcode] === "High"
+                          ? "text-red-900 dark:text-red-400"
+                          : ristCodeVsDesc[dataItem.riskcode] === "Medium"
+                          ? "text-yellow-900 dark:text-yellow-400"
+                          : ristCodeVsDesc[dataItem.riskcode] === "Low"
+                          ? "text-emerald-900 dark:text-emerald-400"
+                          : "text-blue-900 dark:text-blue-400"
                       }`}
                     />
                     {dataItem.alert}
                     <Badge
                       variant={
-                        ristCodeVsDesc[dataItem.riskcode] === "critical" ||
-                        ristCodeVsDesc[dataItem.riskcode] === "high"
+                        ristCodeVsDesc[dataItem.riskcode] === "Critical" ||
+                        ristCodeVsDesc[dataItem.riskcode] === "High"
                           ? "error"
-                          : ristCodeVsDesc[dataItem.riskcode] === "medium"
+                          : ristCodeVsDesc[dataItem.riskcode] === "Medium"
                           ? "warning"
-                          : ristCodeVsDesc[dataItem.riskcode] === "low"
+                          : ristCodeVsDesc[dataItem.riskcode] === "Low"
                           ? "success"
                           : "default"
                       }
                     >
                       {ristCodeVsDesc[dataItem.riskcode]}
                     </Badge>
+                    <Badge variant="neutral">{dataItem.count}</Badge>
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="pl-6">
-                  <p>{removePTags(dataItem.desc)}</p>
-
-                  {dataItem.instances.map((instance) => (
-                    <AccordionItem value={instance.id} key={instance.id}>
-                      <AccordionTrigger>
-                        <span className="flex items-center gap-2 h-8">
-                          <RiLink className="size-4 text-blue-500" />
-                          {instance.uri}
+                <AccordionContent className="px-6">
+                  <div className="mt-2 dark:text-gray-400">
+                    {/* Risk & Confidence */}
+                    {[
+                      {
+                        label: "Risk:",
+                        value: ristCodeVsDesc[dataItem.riskcode],
+                      },
+                      {
+                        label: "Confidence:",
+                        value: ristCodeVsDesc[dataItem.confidence],
+                      },
+                    ].map((item, index) => (
+                      <p
+                        key={index}
+                        className="flex gap-2 mb-2
+                      "
+                      >
+                        <span className="text-sm text-gray-900 font-semibold w-32 flex-shrink-0 dark:text-gray-50">
+                          {item.label}
                         </span>
-                      </AccordionTrigger>
-                      <AccordionContent className="pl-6">
-                        <p>
-                          <span className="text-sm text-gray-900 font-semibold">
-                            Method:
-                          </span>{" "}
-                          {instance.method}
-                        </p>
-                        <p className="mt-1">
-                          <span className="text-sm text-gray-900 font-semibold">
-                            Parameter:
-                          </span>{" "}
-                          {instance.param}
-                        </p>
-                        <p className="mt-1">
-                          <span className="text-sm text-gray-900 font-semibold">
-                            Attack:
-                          </span>{" "}
-                          {instance.attack}
-                        </p>
-                        <p className="mt-1">
-                          <span className="text-sm text-gray-900 font-semibold">
-                            Evidence:
-                          </span>{" "}
-                          {instance.evidence}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                  <p className="mt-2">
-                    <span className="text-sm text-gray-900 font-semibold">
-                      Instances:
-                    </span>{" "}
-                    {dataItem.count}
-                  </p>
-                  <p className="mt-2">
-                    <span className="text-sm text-gray-900 font-semibold">
-                      Solution:
-                    </span>{" "}
-                    {removePTags(dataItem.solution)}
-                  </p>
-                  <p className="flex mt-2">
-                    <p className="text-sm text-gray-900 font-semibold">
-                      Reference:
-                    </p>
-                    <ul className="ml-1">
-                      {extractTextFromPTags(dataItem.reference).map(
-                        (reference, index) => (
-                          <li key={index} className="mb-1">
-                            {reference}
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </p>
-                  <p className="mt-2">
-                    <span className="text-sm text-gray-900 font-semibold">
-                      CWE Id:
-                    </span>{" "}
-                    {dataItem["cweid"]}
-                  </p>
-                  <p className="mt-2">
-                    <span className="text-sm text-gray-900 font-semibold">
-                      WASC Id:
-                    </span>{" "}
-                    {dataItem["wascid"]}
-                  </p>
-                  <p className="mt-2">
-                    <span className="text-sm text-gray-900 font-semibold">
-                      Plugin Id:
-                    </span>{" "}
-                    {dataItem["pluginid"]}
-                  </p>
+                        <Badge variant={getBadgeVariant(item.value)}>
+                          {item.value}
+                        </Badge>
+                      </p>
+                    ))}
+
+                    {/* Other Info */}
+                    {[
+                      { label: "Instances:", value: dataItem.count },
+                      { label: "CWE Id:", value: dataItem.cweid },
+                      { label: "WASC Id:", value: dataItem.wascid },
+                      { label: "Plugin Id:", value: dataItem.pluginid },
+                    ].map((item, index) => (
+                      <p key={index} className="flex gap-2 mb-2">
+                        <span className="text-sm text-gray-900 font-semibold w-32 flex-shrink-0 dark:text-gray-50">
+                          {item.label}
+                        </span>
+                        <span>{item.value}</span>
+                      </p>
+                    ))}
+
+                    {/* Description & Solution */}
+                    {[
+                      {
+                        label: "Description:",
+                        value: removePTags(dataItem.desc),
+                      },
+                      {
+                        label: "Solution:",
+                        value: removePTags(dataItem.solution),
+                      },
+                    ].map((item, index) => (
+                      <p key={index} className="flex gap-2 mb-2">
+                        <span className="text-sm text-gray-900 font-semibold w-32 flex-shrink-0 dark:text-gray-50">
+                          {item.label}
+                        </span>
+                        <div className="flex-grow">{item.value}</div>
+                      </p>
+                    ))}
+
+                    {/* Reference List */}
+                    <div className="flex gap-2 mt-2">
+                      <span className="text-sm text-gray-900 font-semibold w-32 flex-shrink-0 dark:text-gray-50">
+                        Reference:
+                      </span>
+                      <ul className="flex-grow list-disc pl-5">
+                        {extractTextFromPTags(dataItem.reference).map(
+                          (reference, index) => (
+                            <li key={index} className="mb-1">
+                              {reference}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+
+                    {/* Instances (Accordion) */}
+                    {dataItem.instances.map((instance) => (
+                      <AccordionItem value={instance.id} key={instance.id}>
+                        <AccordionTrigger>
+                          <span className="flex items-center gap-2 h-8">
+                            <RiLink className="size-4 text-blue-500" />
+                            {instance.uri}
+                          </span>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-6">
+                          {[
+                            { label: "Method:", value: instance.method },
+                            { label: "Parameter:", value: instance.param },
+                            { label: "Attack:", value: instance.attack },
+                            { label: "Evidence:", value: instance.evidence },
+                          ].map((item, index) => (
+                            <p
+                              key={index}
+                              className="flex mt-1 dark:text-gray-400"
+                            >
+                              <span className="text-sm text-gray-900 font-semibold w-32 flex-shrink-0 dark:text-gray-50">
+                                {item.label}
+                              </span>
+                              <span>{item.value}</span>
+                            </p>
+                          ))}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             ))}

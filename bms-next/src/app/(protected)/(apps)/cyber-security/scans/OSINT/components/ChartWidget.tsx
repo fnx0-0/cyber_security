@@ -1,5 +1,6 @@
 import { Card, DonutChart } from "@tremor/react";
 import { AnalysisResult, HarvesterData, WidgetDataItem } from "./type";
+import { Label } from "@radix-ui/react-label";
 
 /// For Border Color
 const colorMap: Record<string, string> = {
@@ -18,20 +19,23 @@ export default function ChartWidget({
     widgetData.attributes.last_analysis_stats ?? {};
 
   const chartData: WidgetDataItem[] = Object.entries(last_analysis_stats)
-    .filter(([key]) => key !== "timeout") // Exclude "timeout"
+    .filter(([key]) => key !== "timeout")
+    .sort(([a], [b]) => {  // Add sorting
+      const order = ['malicious', 'suspicious', 'undetected', 'harmless'];
+      return order.indexOf(a) - order.indexOf(b);
+    })
     .map(([key, value]) => ({
-      name: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize first letter
+      name: key.charAt(0).toUpperCase() + key.slice(1),
       amount: value,
-      borderColor: colorMap[key] || "bg-gray-500", // Default color if not mapped
+      borderColor: colorMap[key] || "bg-gray-500",
     }));
-
   const reputation = widgetData.attributes.reputation ?? "0";
   const reputationCss =
     reputation >= 0 ? "bg-green-100 text-green-900" : "bg-red-100 text-red-900";
 
   return (
     <>
-      <Card className="col-span-1 rounded-md">
+      {/* <Card className="col-span-1 rounded-md">
         <div className="flex flex-col items-center justify-center h-full">
           <div className="mt-2 grid grid-cols-8 gap-8 items-center">
             <div className="relative col-span-3">
@@ -65,10 +69,10 @@ export default function ChartWidget({
                       className={`${item.borderColor} w-1 shrink-0 rounded`}
                     />
                     <div>
-                      <p className="text-sm font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+                      <p className="text-sm font-medium text-widget-mainHeader">
                         {item.amount}
                       </p>
-                      <p className="mt-0.5 whitespace-nowrap text-sm text-tremor-content dark:text-dark-tremor-content">
+                      <p className="mt-0.5 whitespace-nowrap text-sm text-widget-mainDesc">
                         {item.name}
                       </p>
                     </div>
@@ -78,7 +82,62 @@ export default function ChartWidget({
             </div>
           </div>
         </div>
-      </Card>
+      </Card> */}
+
+
+      <div className="col-span-1 space-y-2">
+        <Label className=" font-bold text-widget-title text-widgetHeader">Security Vendors Flag</Label>
+
+        <Card className="rounded-md p-2.5">
+          <div className="flex flex-col items-center justify-center h-full">
+
+            <div className="mt-2 grid grid-cols-8 gap-8 items-center">
+              <div className="relative col-span-3">
+                <DonutChart
+                  data={chartData}
+                  category="amount"
+                  index="name"
+                  showTooltip={false}
+                  className="w-full h-28 hide-donut-center"
+                  colors={chartData.map(item => item.borderColor.replace('bg-', ''))}
+                />
+                <div className="flex flex-wrap justify-center gap-4 mt-2">
+                  <span className="inline-flex items-center space-x-2 rounded-md bg-tremor-background py-1 pl-2.5 pr-1 ring-1 ring-inset ring-tremor-ring">
+                    <span className="text-xs font-semibold text-gray-700">
+                      Reputation
+                    </span>
+                    <span
+                      className={`rounded-md text-xs px-2 font-bold ${reputationCss}`}
+                    >
+                      {reputation}
+                    </span>
+                  </span>
+                </div>
+              </div>
+              <div className="col-span-5 py-6">
+                {/* <p className="text-xs">Levels</p > */}
+                <ul className="space-y-1 grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                  {chartData.map((item) => (
+                    <li key={item.name} className="flex space-x-3">
+                      <span
+                        className={`${item.borderColor} w-1 shrink-0 rounded`}
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-widget-mainHeader">
+                          {item.amount}
+                        </p>
+                        <p className="mt-0.5 whitespace-nowrap text-sm text-widget-mainDesc">
+                          {item.name}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
     </>
   );
 }

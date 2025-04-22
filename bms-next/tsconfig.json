@@ -28,7 +28,7 @@
       ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(protected)/(apps)/cyber-security/scans/OSINT/Widgets.tsx", "src/app/(protected)/(apps)/cyber-security/scans/cloudContainer/cloud/[serviceName]/dashboard_discarded.tsx"],
   "exclude": ["node_modules"],
   "sourceMap": true
 }

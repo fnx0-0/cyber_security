@@ -1,6 +1,6 @@
-import React ,{ useState } from 'react';
+import { useState } from 'react';
 import { XCircle, Loader2, AlertTriangle, AlertCircle, AlertOctagon, Shield, Server, Network } from 'lucide-react';
-import { scanPorts, type PortScanResult } from "../../lib/portScanner";
+import { scanPorts, type PortScanResult } from '../../misc/lib/portScanner';
 
 interface PortScanModalProps {
   onClose: () => void;

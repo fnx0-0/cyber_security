@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AlertTriangle, Bot, BrainCircuit, Calendar, Clock, GlobeLock, Play, ScanSearch, Search, ServerCog, ShieldAlert, ShieldCheck, Users, Workflow } from 'lucide-react';
-import {useRouter } from 'next/Navigation';
+import {useRouter } from 'next/navigation';
 
 interface AIAgent {
   id: string;
@@ -199,14 +199,14 @@ export default function CyberSecurityComponents() {
     };
 
     setSchedules(prev => [...prev, schedule]); */
-    router.push('/scans/Intrusion');
+    router.push('/cyber-security/scans/Intrusion');
   };
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {comps.map(agent => (
-          <div key={agent.id} className="bg-white rounded-lg shadow-sm border p-6">
+          <div key={agent.id} className="bg-white rounded-lg shadow-sm border p-6 !dark">
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-2 bg-primary/10 rounded-lg">

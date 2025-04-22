@@ -9,12 +9,12 @@ const TableRoot = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, forwardedRef) => (
   <div
-    ref={forwardedRef}
-    // Activate if table is used in a float environment
-    // className="flow-root"
+  // Activate if table is used in a float environment
+  // className="flow-root"
   >
     <div
       // make table scrollable on mobile
+      ref={forwardedRef}
       className={cx("w-full overflow-auto whitespace-nowrap", className)}
       {...props}
     >
@@ -63,9 +63,7 @@ const TableHeaderCell = React.forwardRef<
     className={cx(
       // base
       "border-b px-4 py-3.5 text-left text-sm font-semibold",
-      // text color
-      "text-gray-900 dark:text-gray-50",
-      // border color
+      "text-table-tableHeader",
       "border-gray-200 dark:border-gray-800",
       className
     )}
@@ -121,7 +119,7 @@ const TableCell = React.forwardRef<
       // base
       "p-4 text-sm",
       // text color
-      "text-gray-600 dark:text-gray-400",
+      "text-table-tableDesc",
       className
     )}
     {...props}
@@ -141,7 +139,7 @@ const TableFoot = React.forwardRef<
         // base
         "border-t text-left font-medium",
         // text color
-        "text-gray-900 dark:text-gray-50",
+        "text-table-tableHeader",
         // border color
         "border-gray-200 dark:border-gray-800",
         className

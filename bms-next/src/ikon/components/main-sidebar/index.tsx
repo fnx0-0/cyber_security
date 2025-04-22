@@ -71,7 +71,7 @@ const navManu = [
   //  },
    {
     title: "Cyber Security",
-    href: "cyber-security",
+    href: "cyber-security/dashboard",
     icon: ShieldCheck,
     isActive: false,
    },

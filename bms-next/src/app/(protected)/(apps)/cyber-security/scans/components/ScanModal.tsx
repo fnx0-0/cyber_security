@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { XCircle, Loader2, AlertTriangle, AlertCircle, AlertOctagon, Shield, CheckCircle, Globe, Lock, Server } from 'lucide-react';
-import { scanWebsite, type ScanResult } from '../../lib/scanner';
-import React from 'react';
+import { scanWebsite, type ScanResult } from '../../misc/lib/scanner';
 
 interface ScanModalProps {
   onClose: () => void;
